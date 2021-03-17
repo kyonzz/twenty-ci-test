@@ -18,9 +18,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import * as React from "react";
-import { useForm } from "react-hook-form";
+import { useAuth } from "../../hooks/auth";
 import { usePost } from "../../hooks/post";
 import Post from "../Post/post";
+import PostForm from "../PostForm";
 
 interface IProps {}
 
@@ -31,13 +32,14 @@ const PostCreateModal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  const { register, handleSubmit } = useForm();
   const [, { addPost }] = usePost();
 
   const onSubmit = ({ title, content }: any) => {
     addPost(title, content);
     onClose();
   };
+
+  const formRef = React.useRef(null);
 
   return (
     <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
@@ -46,32 +48,18 @@ const PostCreateModal = ({
         <ModalHeader>Create new post</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Input
-              placeholder="Title"
-              maxLength={40}
-              mb={4}
-              isRequired
-              name="title"
-              ref={register}
-            />
-            <Textarea
-              isRequired
-              // value={value}
-              // onChange={handleInputChange}
-              maxLength={200}
-              // noOfLines={5}
-              resize="none"
-              placeholder="Content"
-              size="sm"
-              name="content"
-              ref={register}
-            />
-          </form>
+          <PostForm ref={formRef} onSubmit={onSubmit} />
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleSubmit(onSubmit)}>
+          <Button
+            colorScheme="blue"
+            mr={3}
+            onClick={() => {
+              // @ts-ignore
+              formRef.current.submit();
+            }}
+          >
             Post
           </Button>
           <Button variant="ghost" onClick={onClose}>
@@ -86,6 +74,7 @@ const PostCreateModal = ({
 const PostPage: React.FC<IProps> = () => {
   const [{ posts }] = usePost();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {signout} = useAuth();
 
   return (
     <>
@@ -106,6 +95,10 @@ const PostPage: React.FC<IProps> = () => {
         ) : (
           <Text>There is no post yet</Text>
         )}
+
+        <Button onClick={() => signout()}  variant="outline">
+          Logout
+        </Button>
       </HStack>
 
       <PostCreateModal isOpen={isOpen} onClose={onClose} />
