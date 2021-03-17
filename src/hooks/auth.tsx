@@ -1,32 +1,20 @@
 import * as React from "react";
 
-const fakeAuth = {
-  isAuthenticated: false,
-  signin(cb: any) {
-    fakeAuth.isAuthenticated = true;
-    setTimeout(cb, 100); // fake async
-  },
-  signout(cb: any) {
-    fakeAuth.isAuthenticated = false;
-    setTimeout(cb, 100);
-  },
-};
-
 export const useProvideAuth = () => {
   const [user, setUser] = React.useState<string | null>(null);
 
-  const signin = (cb: any) => {
-    return fakeAuth.signin(() => {
-      setUser("user");
-      cb();
+  const signin = (username: string, password: string) => {
+    return new Promise((res, rej) => {
+      if (username === "demo" && password === "demo") {
+        setUser(username);
+        res("Success");
+      }
+      rej("Wrong username or password");
     });
   };
 
   const signout = (cb: any) => {
-    return fakeAuth.signout(() => {
-      setUser(null);
-      cb();
-    });
+    setUser(null);
   };
 
   return {

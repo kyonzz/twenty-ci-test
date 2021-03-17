@@ -1,19 +1,10 @@
 import * as React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-  useHistory,
-  useLocation,
-  RouteProps,
-} from "react-router-dom";
+import { Route, Redirect, RouteProps } from "react-router-dom";
 import { useAuth } from "../../hooks/auth";
 
 interface IProps extends RouteProps {}
 
-const PrivateRoute: React.FC<IProps> = ({ children, ...rest}) => {
+const PrivateRoute: React.FC<IProps> = ({ children, ...rest }) => {
   let auth = useAuth();
 
   return (
