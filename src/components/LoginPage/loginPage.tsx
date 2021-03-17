@@ -9,6 +9,7 @@ import {
   Stack,
   Text,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import * as React from "react";
 import { useForm } from "react-hook-form";
@@ -23,6 +24,8 @@ type FormData = {
 };
 
 const LoginPage: React.FC<IProps> = () => {
+  const toast = useToast();
+
   const {
     handleSubmit,
     errors,
@@ -42,12 +45,20 @@ const LoginPage: React.FC<IProps> = () => {
       .then((data: any) => {
         console.log("data: ", data);
 
+        toast.closeAll();
         history.replace(from);
       })
       .catch((err: any) => {
         console.log("err: ", err);
 
-        alert(err);
+        toast({
+          position: "top-right",
+          title: "Login Failure",
+          description: err,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
       });
   }
 

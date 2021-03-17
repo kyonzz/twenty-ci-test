@@ -6,32 +6,36 @@ import AuthProvider from "./hooks/auth";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import PrivateRoute from "./components/PrivateRoute";
+import PostPage from "./components/PostPage";
+import PostProvider from "./hooks/post";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
     <AuthProvider>
       <Router>
-        <Grid minH="100vh" p={3}>
-          <ColorModeSwitcher
-            w="40px"
-            h="40px"
-            position="absolute"
-            top="10px"
-            right="10px"
-          />
-          <Switch>
-            <Route exact path="/login">
-              <LoginPage />
-            </Route>
-            <PrivateRoute path="/">
-              <Switch>
-                <Route exact path="/">
-                  <p>osts</p>
-                </Route>
-              </Switch>
-            </PrivateRoute>
-          </Switch>
-        </Grid>
+        {/* <Grid minH="100vh" p={3}> */}
+        <ColorModeSwitcher
+          w="40px"
+          h="40px"
+          position="absolute"
+          top="10px"
+          right="10px"
+        />
+        <Switch>
+          <Route exact path="/login">
+            <LoginPage />
+          </Route>
+          <PrivateRoute path="/">
+            <Switch>
+              <Route exact path="/">
+                <PostProvider>
+                  <PostPage />
+                </PostProvider>
+              </Route>
+            </Switch>
+          </PrivateRoute>
+        </Switch>
+        {/* </Grid> */}
       </Router>
     </AuthProvider>
   </ChakraProvider>
