@@ -12,6 +12,7 @@ interface PostState {
 
 interface PostApi {
   addPost: (title: string, content: string) => void;
+  deletePost: (id: string | number) => void;
 }
 
 const PostContext = React.createContext<[PostState, PostApi]>([
@@ -57,7 +58,11 @@ const PostProvider: React.FC<{}> = ({ children }) => {
     ]);
   };
 
-  const api = { addPost };
+  const deletePost = (id) => {
+    setPosts(posts.filter((post) => post.id !== id));
+  };
+
+  const api = { addPost, deletePost };
 
   return (
     <PostContext.Provider value={[state, api]}>{children}</PostContext.Provider>

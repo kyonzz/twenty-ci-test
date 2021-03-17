@@ -93,15 +93,19 @@ const PostPage: React.FC<IProps> = () => {
         <Button onClick={onOpen} colorScheme="teal" variant="outline">
           New post
         </Button>
-        <List spacing={3}>
-          {posts
-            .sort((a, b) => b.created_at - a.created_at)
-            .map((post) => (
-              <ListItem key={post.id}>
-                <Post {...post} />
-              </ListItem>
-            ))}
-        </List>
+        {posts.length ? (
+          <List spacing={3}>
+            {posts
+              .sort((a, b) => b.created_at - a.created_at)
+              .map((post) => (
+                <ListItem key={post.id}>
+                  <Post {...post} />
+                </ListItem>
+              ))}
+          </List>
+        ) : (
+          <Text>There is no post yet</Text>
+        )}
       </HStack>
 
       <PostCreateModal isOpen={isOpen} onClose={onClose} />
